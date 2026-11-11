@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.idea/
+.vscode/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.pytest_cache/
+
+# data and LLM embeddings (see README: Data preparation)
+data/*/raw/
+data/*/handled/
+*.pkl
+*.npz
+*.npy
+
+# training outputs
+runs/
+log/
+saved/
+*.pt
+*.pth
+*.bin
+*.log

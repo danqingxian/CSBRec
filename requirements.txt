@@ -1,0 +1,12 @@
+# Core training and the inherited LLM-ESR entry point.
+# These are minimum dependencies, not a lockfile for the paper experiments.
+torch>=2.0
+numpy>=1.24
+pandas>=2.0
+tqdm>=4.65
+tensorboard>=2.12
+# only for the data-preparation notebooks in data/
+scikit-learn>=1.3
+jsonlines
+requests
+matplotlib
