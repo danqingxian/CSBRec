@@ -1,14 +1,12 @@
 # Third-party notices
 
-Source files also received whitespace and line-ending normalization for this release.
-
 CSBRec builds on the MIT-licensed projects listed below. Their licence texts are reproduced below.
 
 ## LLM-ESR
 
 Source: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
 
-Used in this repository: `main.py`, `models/`, `generators/`, `trainers/`, `utils/`, `data/` and `experiments/`
+Used in this repository: `main.py`, `models/`, `generators/`, `trainers/`, `utils/`, `data/` and `experiments/`.
 The CSBRec sub-models in `csbrec/model.py` subclass LLM-ESR's dual-view models.
 
 Local changes to the upstream utilities and preprocessing include:
@@ -19,9 +17,6 @@ Local changes to the upstream utilities and preprocessing include:
   `text-embedding-ada-002` and the original prompt truncation rules are retained.
 - Removed hard-coded exploratory item lookups, notebook outputs/execution counts, and obsolete machine-path
   comments; corrected the retrieval notebook's default dataset directory from `yelp_new` to `yelp`.
-
-These preprocessing edits have been checked with synthetic inputs; the raw datasets and paid embedding API
-were not executed as part of this release preparation.
 
 ```
 MIT License

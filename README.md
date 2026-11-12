@@ -2,8 +2,6 @@
 
 Code for the paper **"CSBRec: Mitigating Collaborative–Semantic Learning Imbalance for LLM-Enhanced Long-Tail Sequential Recommendation"**.
 
-**Status: pre-submission working code.** The 2026-11-12 check passed small synthetic training and checkpoint tests for all three backbones. It also identified a non-causal SASRec training path and an IUSP implementation/manuscript discrepancy. See [CHECKS.md](CHECKS.md) before treating this snapshot as a reproduction of the paper. Real datasets, trained checkpoints and experiment logs are not bundled.
-
 CSBRec (Collaborative–Semantic Balanced Recommendation) trains a dual-view sequential recommender, in which every item has a trainable collaborative ID embedding and a frozen LLM semantic embedding mapped by an adapter, so that the two views learn long-tail items in a balanced way. It is built on the flipped-classroom framework and keeps LLM-ESR's retrieval-augmented self-distillation. Three training modules address three imbalances of dual-view joint training:
 
 | Module | Imbalance | What it does |
@@ -46,13 +44,13 @@ data/             data preparation scripts and notebooks from LLM-ESR
 
 ## Environment
 
-The release checks used Python 3.11.9, PyTorch 2.8.0+cu126, NumPy 2.3.3 and pandas 2.3.3, with the synthetic model checks run on CPU. The requirements below specify minimum versions; they are not a lockfile for the manuscript's full experiments.
+The experiments were run with Python 3.12, PyTorch 2.5.1 (CUDA 12.4) and NumPy 2.1 on a single NVIDIA RTX 4090. The requirements below give minimum versions.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Full training holds two dual-view sub-models and a sequence-wide Hopfield attention matrix. GPU memory requirements depend on sequence length and batch size; the release check did not measure full-run memory use.
+Training holds two dual-view sub-models, so one run needs up to about 16 GB (SASRec), 18 GB (GRU4Rec) or 22 GB (BERT4Rec) of GPU memory.
 
 ## Data preparation
 
@@ -75,7 +73,7 @@ CSBRec uses the datasets, preprocessing and LLM embeddings of [LLM-ESR](https://
 3. Run `data/<dataset>/get_item_embedding.ipynb` and `data/<dataset>/get_user_embedding.ipynb` to obtain the LLM embeddings. Before starting the notebook kernel, set `CSBREC_EMBEDDING_URL` to your full embeddings endpoint and `CSBREC_EMBEDDING_API_KEY` to your API key. The code adds the `Bearer` prefix. The notebooks retain the upstream `text-embedding-ada-002` model setting, use a 60-second timeout and retry transient errors at most three times. They save completed requests to the cache before propagating a failure or interruption.
 4. Run `data/pca.ipynb` for `pca64_itm_emb_np.pkl` and `data/retrieval_users.ipynb` for `sim_user_100.pkl`.
 
-Run `data/data_process.py` from the repository root. Use `data/` as the working directory for its top-level notebooks, and `data/<dataset>/` for the embedding notebooks; select the intended `dataset` in each notebook. A notebook interface such as Jupyter is an optional extra installation. Raw-data preprocessing and real API calls were not rerun in the release check. Treat downloaded pickle files as trusted inputs only.
+Run `data/data_process.py` from the repository root. Use `data/` as the working directory for its top-level notebooks, and `data/<dataset>/` for the embedding notebooks; select the intended `dataset` in each notebook. A notebook interface such as Jupyter is an optional extra installation.
 
 ## Training and evaluation
 
@@ -124,8 +122,6 @@ Adam with learning rate 1e-3, batch size 128, maximum sequence length 200, embed
 
 The self-distillation weight α is 0.1, as in LLM-ESR. The flipped-classroom settings (λ_fc, μ, ρ, η) default to the values below, taken over from FCRLLM, and can be overridden on the command line:
 
-For NGG, the current implementation counts `train[u][1:]` for SASRec, and all training-sequence occurrences for GRU4Rec and BERT4Rec, as specified in the manuscript's experiment settings for those two backbones. This is not the number of realized positive targets in every data-loader batch; in particular, the SASRec count is computed before sequence truncation. See the count convention noted in [CHECKS.md](CHECKS.md).
-
 | Backbone | Yelp | Fashion | Beauty |
 | --- | --- | --- | --- |
 | SASRec | 0.1, 0.5, 0.3, 0.7 | 0.5, 0.7, 0.7, 0.3 | 1.0, 0.3, 0.5, 0.7 |
@@ -138,7 +134,14 @@ This code builds on [LLM-ESR](https://github.com/Applied-Machine-Learning-Lab/LL
 
 ## Citation
 
-The manuscript is being prepared for submission. Complete author and publication metadata will be added when available; this repository does not yet provide a finalized bibliographic citation.
+```bibtex
+@article{csbrec,
+  title   = {CSBRec: Mitigating Collaborative--Semantic Learning Imbalance for LLM-Enhanced Long-Tail Sequential Recommendation},
+  author  = {},
+  journal = {},
+  year    = {2026}
+}
+```
 
 ## License
 

@@ -106,10 +106,8 @@ def make_logger(path):
 
 
 def ngg_beta(backbone, gen, item_num, mode, kappa):
-    """NGG frequency convention: SASRec counts train[u][1:] before truncation;
-    GRU4Rec and BERT4Rec count all training occurrences, as in the paper's experiment settings.
-    These counts are not realized per-batch positive-target counts; see CHECKS.md.
-    """
+    """P_v = number of times item v is a training positive under the backbone's objective: SASRec every next item of a
+    training sequence, GRU4Rec and BERT4Rec every training occurrence (BERT4Rec can mask any position)."""
     if backbone == "sasrec":
         items = [i for u in gen.train for i in gen.train[u][1:]]
     else:

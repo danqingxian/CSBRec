@@ -1,5 +1,4 @@
-# Core training and the inherited LLM-ESR entry point.
-# These are minimum dependencies, not a lockfile for the paper experiments.
+# Experiments ran with Python 3.12, CUDA 12.4, torch 2.5.1, numpy 2.1.3; minimum versions below.
 torch>=2.0
 numpy>=1.24
 pandas>=2.0

@@ -12,8 +12,10 @@ Scores are LLM-ESR's own: s_co(u, v) = h_co(u) . e_co(v) (collaborative view), s
         semantic view weight sigmoid(s_co(pos) - s_co(neg)), collaborative view weight sigmoid(s_se(pos) - s_se(neg)).
         L_cv = L_cv^se + L_cv^co.
   IUSP  item-uniform semantic structure preservation. Each step draws B items uniformly from the item set and matches
-        the cosine similarities of their adapter outputs to those of their centred LLM embeddings:
-        L_sp = mean_ij (cos(A_i, A_j) - cos(l_i, l_j))^2.
+        the cosine similarities of their adapter outputs to those of their LLM embeddings:
+        L_sp = mean_ij (cos(A_i - mean_B A, A_j - mean_B A) - cos(l_i - mean_V l, l_j - mean_V l))^2,
+        where the adapter outputs are centred by the mean over the B sampled items and the frozen LLM embeddings by
+        the mean over the whole item set V (computed once).
 
 Per sub-model loss: L = L_rec^beta + alpha * L_SD + lambda_cv * L_cv + lambda_sp * L_sp, where L_rec^beta is the
 dual-view BCE with NGG and L_SD is LLM-ESR's retrieval-augmented self-distillation (unchanged).
